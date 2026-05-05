@@ -11,7 +11,12 @@ paths:
       tags: [auth]
       deprecated: true
       summary: 이메일 인증 요청
+      description: |
+        이메일 인증에 필요한 6자리 코드를 입력한 이메일로 발송합니다.
+
+        응답에 명시된 인증 코드의 유효시간 동안만 해당 이메일로 인증이 가능합니다.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -21,10 +26,36 @@ paths:
                 email:
                   type: string
                   format: email
-                  description: 이메일 주소입니다.
       responses:
+        "200":
+          description: 요청이 정상적으로 처리되었습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  expiresAt:
+                    type: string
+                    format: date-time
+                    description: 인증 코드의 유효 시간입니다. 명시된 시간이 지나면 코드는 파기됩니다.
         "400":
-          description: 잘못된 형식입니다.
+          description: 잘못된 이메일 형식 또는 이미 가입된 이메일.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: 사용자가 지정된 시간에 너무 많은 요청을 보냈습니다. (Rate limiting)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: |
+            이 작업을 서버가 수행할 수 없습니다.
+
+            서버에 STMP, POP 설정이 올바르게 구성되지 않았거나,
+            서드파티 이메일 서버가 응답하지 않는 경우 이 응답코드가 반환됩니다.
           content:
             application/json:
               schema:
@@ -35,22 +66,42 @@ paths:
       deprecated: true
       summary: 이메일 인증
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
-              required: [email, verificationToken]
               properties:
                 email:
                   type: string
                   format: email
                   description: 이메일 주소입니다.
-                verificationToken:
+                verificationCode:
                   type: string
-                  description: 인증 토큰입니다.
+                  description: 이메일 인증에 필요한 6자리 인증 코드입니다.
+                  example: "123456"
       responses:
+        "200":
+          description: |
+            이메일 인증에 성공하였습니다.
+            회원가입에 필요한 인증 토큰이 반환됩니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  verificationToken:
+                    type: string
+                    format: uuid
+                    description: 회원가입에 필요한 이메일 인증 토큰입니다.
         "400":
           description: 잘못된 형식입니다.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: 인증 코드 불일치 또는 만료된 인증 코드.
           content:
             application/json:
               schema:
@@ -60,6 +111,7 @@ paths:
       tags: [auth]
       summary: 회원 가입
       requestBody:
+        required: true
         content:
           application/json:
             schema:
