@@ -551,7 +551,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GuessListResponse"
+                $ref: "#/components/schemas/GameGuessListResponse"
         "401":
           description: 사용자가 인증되지 않음.
           content:
@@ -588,14 +588,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SubmitGuessRequest"
+              $ref: "#/components/schemas/GameGuessSubmitRequest"
       responses:
         "200":
           description: 단어가 정상적으로 제출됨.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SubmitGuessResponse"
+                $ref: "#/components/schemas/GameGuessSubmitResponse"
         "400":
           description: 잘못된 형식입니다.
           content:
@@ -628,7 +628,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SubmitGuessResponse"
+                $ref: "#/components/schemas/GameGuessSubmitResponseWithoutProximity"
         "429":
           description: 사용자가 지정된 시간에 너무 많은 요청을 보냄. (Rate limiting)
           content:
@@ -887,7 +887,7 @@ components:
     GameUpdateResponse:
       $ref: "#/components/schemas/GameResponse"
 
-    BaseGuess:
+    GuessSnippet:
       type: object
       required: [order, word, submittedAt]
       properties:
@@ -902,51 +902,58 @@ components:
         word:
           type: string
           description: 사용자가 제출한 단어
+        proximity:
+          allOf:
+            - $ref: "#/components/schemas/ProximitySnippet"
+            - type: object
+              required: [displayText]
+              properties:
+                displayText:
+                  type: string
+                  description: 클라이언트에 표시될 정확도 문구
+                  examples:
+                    - "113/1000"
+                    - "cold"
+                    - "tepid"
+                    - "far"
+                    - "1000위 이상" # TODO: 순위권 외 표기방식 결정하기
         submittedAt:
           type: string
           format: date-time
           description: 제출 시각 (서버 기준)
-        proximity:
+
+    ProximitySnippet:
+      type:
+        - object
+        - "null"
+      description: |
+        제출된 단어와 정답 단어간의 유사도/정확도 정보입니다.
+
+        제출한 단어가 Out-of-Vocabulary 인 경우에는 null 로 대체됩니다.
+      required: [similarity, permille, normalizedSimilarity]
+      properties:
+        similarity:
+          type: number
+          description: 벡터 유사도
+          example: 0.5612662
+        permille:
           type:
-            - object
+            - integer
             - "null"
           description: |
-            제출된 단어와 정답 단어간의 유사도/정확도 정보입니다.
+            가장 가까운 999개의 단어 중 몇 번째인지
 
-            제출한 단어가 Out-of-Vocabulary 인 경우에는 null 로 대체됩니다.
-          required: [similarity, permille, normalizedSimilarity, displayText]
-          properties:
-            similarity:
-              type: number
-              description: 벡터 유사도
-              example: 0.5612662
-            permille:
-              type:
-                - integer
-                - "null"
-              description: |
-                가장 가까운 999개의 단어 중 몇 번째인지
+            정답에 가까울 수록 낮은 숫자가 주어지며
+            순위 권 외(1000위 이상)이면 null 이 반환된다.
+          minimum: 1
+          maximum: 999
+          example: null
+        normalizedSimilarity:
+          type: number
+          description: -100 에서 100 사이로 정규화 된 유사도 수치
+          example: 20.92
 
-                정답에 가까울 수록 낮은 숫자가 주어지며
-                순위 권 외(1000위 이상)이면 null 이 반환된다.
-              minimum: 1
-              maximum: 999
-              example: null
-            normalizedSimilarity:
-              type: number
-              description: -100 에서 100 사이로 정규화 된 유사도 수치
-              example: 20.92
-            displayText:
-              type: string
-              description: 클라이언트에 표시될 정확도 문구
-              examples:
-                - "113/1000"
-                - "cold"
-                - "tepid"
-                - "far"
-                - "1000위 이상" # TODO: 순위권 외 표기방식 결정하기
-
-    SubmitGuessRequest:
+    GameGuessSubmitRequest:
       type: object
       required: [word]
       properties:
@@ -954,11 +961,39 @@ components:
           type: string
           description: 사용자가 추측한 단어
 
-    SubmitGuessResponse:
-      $ref: "#/components/schemas/BaseGuess"
+    GameGuessSubmitResponse:
+      $ref: "#/components/schemas/GuessSnippet"
 
-    GuessListResponse:
+    GameGuessSubmitResponseWithoutProximity:
+      allOf:
+        - $ref: "#/components/schemas/GuessSnippet"
+        - example:
+            order: 172,
+            word: 뷁
+            submittedAt: "2026-05-05T17:36:16.874Z"
+
+    GameGuessListResponse:
       # TODO: 토론하기 - 과연 Pagination 해야하는가...
       type: array
       items:
-        $ref: "#/components/schemas/BaseGuess"
+        $ref: "#/components/schemas/GuessSnippet"
+      example:
+        - order: 1
+          word: "사과"
+          proximity:
+            similarity: 0.5612662
+            permille: 19
+            normalizedSimilarity: 40.92
+            displayText: "19/1000"
+          submittedAt: "2026-05-05T17:43:12.438Z"
+        - order: 2
+          word: "정장"
+          proximity:
+            similarity: -0.0412662
+            permille: null
+            normalizedSimilarity: -9.48
+            displayText: "far"
+          submittedAt: "2026-05-05T17:43:12.438Z"
+        - order: 3
+          word: "팬이에요"
+          submittedAt: "2026-05-05T17:43:12.438Z"
