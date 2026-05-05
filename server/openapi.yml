@@ -28,6 +28,7 @@ paths:
     patch:
       tags: [user]
       summary: 사용자 정보 수정
+      security: [bearerAuth: []]
   /game:
     get:
       tags: [game]
@@ -35,35 +36,44 @@ paths:
     post:
       tags: [game]
       summary: 게임 생성
+      security: [bearerAuth: []]
   /game/{gameId}:
     get:
       tags: [game]
       summary: 게임 정보 보기
+      security: [bearerAuth: []]
     patch:
       tags: [game]
       summary: 게임 정보 수정
+      security: [bearerAuth: []]
   /game/{gameId}/player:
     get:
       tags: [game]
       summary: 게임 참가자 목록
+      security: [bearerAuth: []]
     post:
       tags: [game]
       summary: 게임 참가
+      security: [bearerAuth: []]
   /game/{gameId}/player/{userId}:
     get:
       tags: [game]
       summary: 게임 참가자 게임 기록 정보
+      security: [bearerAuth: []]
     delete:
       tags: [game]
       summary: 게임 참가자 기록 말소
+      security: [bearerAuth: []]
   /game/{gameId}/player/{userId}/guess:
     get:
       tags: [game]
       summary: 게임 참가자 제출 기록
+      security: [bearerAuth: []]
   /game/{gameId}/guess:
     post:
       tags: [game]
       summary: 제출
+      security: [bearerAuth: []]
 components:
   securitySchemes:
     name:
