@@ -25,6 +25,14 @@ paths:
       tags: [auth]
       summary: 회원 로그인
   /user/{userId}:
+    parameters:
+      - in: path
+        required: true
+        name: userId
+        description: 사용자를 구분하는 고유 식별자입니다.
+        schema:
+          type: string
+          format: uuid
     patch:
       tags: [user]
       summary: 사용자 정보 수정
@@ -38,6 +46,14 @@ paths:
       summary: 게임 생성
       security: [bearerAuth: []]
   /game/{gameId}:
+    parameters:
+      - in: path
+        required: true
+        name: gameId
+        description: 게임을 구분하는 고유 식별자입니다.
+        schema:
+          type: string
+          format: uuid
     get:
       tags: [game]
       summary: 게임 정보 보기
@@ -47,6 +63,14 @@ paths:
       summary: 게임 정보 수정
       security: [bearerAuth: []]
   /game/{gameId}/player:
+    parameters:
+      - in: path
+        required: true
+        name: gameId
+        description: 게임을 구분하는 고유 식별자입니다.
+        schema:
+          type: string
+          format: uuid
     get:
       tags: [game]
       summary: 게임 참가자 목록
@@ -56,6 +80,21 @@ paths:
       summary: 게임 참가
       security: [bearerAuth: []]
   /game/{gameId}/player/{userId}:
+    parameters:
+      - in: path
+        required: true
+        name: gameId
+        description: 게임을 구분하는 고유 식별자입니다.
+        schema:
+          type: string
+          format: uuid
+      - in: path
+        required: true
+        name: userId
+        description: 사용자를 구분하는 고유 식별자입니다.
+        schema:
+          type: string
+          format: uuid
     get:
       tags: [game]
       summary: 게임 참가자 게임 기록 정보
@@ -65,11 +104,34 @@ paths:
       summary: 게임 참가자 기록 말소
       security: [bearerAuth: []]
   /game/{gameId}/player/{userId}/guess:
+    parameters:
+      - in: path
+        required: true
+        name: gameId
+        description: 게임을 구분하는 고유 식별자입니다.
+        schema:
+          type: string
+          format: uuid
+      - in: path
+        required: true
+        name: userId
+        description: 사용자를 구분하는 고유 식별자입니다.
+        schema:
+          type: string
+          format: uuid
     get:
       tags: [game]
       summary: 게임 참가자 제출 기록
       security: [bearerAuth: []]
   /game/{gameId}/guess:
+    parameters:
+      - in: path
+        required: true
+        name: gameId
+        description: 게임을 구분하는 고유 식별자입니다.
+        schema:
+          type: string
+          format: uuid
     post:
       tags: [game]
       summary: 제출
