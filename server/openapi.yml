@@ -11,19 +11,105 @@ paths:
       tags: [auth]
       deprecated: true
       summary: 이메일 인증 요청
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: 이메일 주소입니다.
+      responses:
+        "400":
+          description: 잘못된 형식입니다.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /auth/email/verify:
     post:
       tags: [auth]
       deprecated: true
       summary: 이메일 인증
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, verificationToken]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: 이메일 주소입니다.
+                verificationToken:
+                  type: string
+                  description: 인증 토큰입니다.
+      responses:
+        "400":
+          description: 잘못된 형식입니다.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /auth/signup:
     post:
       tags: [auth]
       summary: 회원 가입
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, email, password]
+              properties:
+                username:
+                  type: string
+                  description: 사용자명입니다.
+                email:
+                  type: string
+                  format: email
+                  description: 사용자 이메일 주소입니다.
+                password:
+                  type: string
+                  format: password
+                  description: 사용자 비밀번호입니다.
+      responses:
+        "400":
+          description: 잘못된 형식입니다.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /auth/signin:
     post:
       tags: [auth]
       summary: 회원 로그인
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: 사용자 이메일 주소입니다.
+                password:
+                  type: string
+                  format: password
+                  description: 사용자 비밀번호입니다.
+      responses:
+        "400":
+          description: 잘못된 형식입니다.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /user/{userId}:
     parameters:
       - in: path
@@ -37,7 +123,26 @@ paths:
       tags: [user]
       summary: 사용자 정보 수정
       security: [bearerAuth: []]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: 사용자명입니다.
+                password:
+                  type: string
+                  format: password
+                  description: 사용자 비밀번호입니다.
       responses:
+        "400":
+          description: 잘못된 형식입니다.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "401":
           description: 사용자가 인증되지 않음.
           content:
