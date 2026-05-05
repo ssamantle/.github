@@ -60,6 +60,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /auth/email/verify:
     post:
       tags: [auth]
@@ -106,6 +107,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /auth/signup:
     post:
       tags: [auth]
@@ -154,6 +156,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /auth/signin:
     post:
       tags: [auth]
@@ -202,6 +205,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /user/{userId}:
     parameters:
       - in: path
@@ -317,6 +321,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /game:
     get:
       tags: [game]
@@ -359,6 +364,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /game/{gameId}:
     parameters:
       - in: path
@@ -440,6 +446,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /game/{gameId}/player:
     parameters:
       - in: path
@@ -489,6 +496,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /game/{gameId}/player/{userId}:
     parameters:
       - in: path
@@ -551,6 +559,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /game/{gameId}/player/{userId}/guess:
     parameters:
       - in: path
@@ -590,6 +599,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /game/{gameId}/guess:
     parameters:
       - in: path
@@ -637,12 +647,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
 components:
   securitySchemes:
     name:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
   schemas:
     ErrorResponse:
       type: object
