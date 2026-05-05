@@ -672,7 +672,7 @@ components:
           type: string
           example: "Bearer"
 
-    BaseUser:
+    UserSnippet:
       type: object
       description: |
         일반 사용자들에게 보여져도 되는 사용자 객체의 기본 구조입니다.
@@ -694,7 +694,7 @@ components:
         사용자 본인의 정보를 조회하는 경우 반환되는 상세 정보 스키마입니다.
         이메일 및 계정 설정 상태 등 개인정보를 포함합니다.
       allOf:
-        - $ref: "#/components/schemas/BaseUser"
+        - $ref: "#/components/schemas/UserSnippet"
         - type: object
           required: [email, createdAt, updatedAt]
           properties:
@@ -748,7 +748,7 @@ components:
     UserUpdateResponse:
       $ref: "#/components/schemas/UserResponse"
 
-    BaseGame:
+    GameSnippet:
       description: |
         일반 사용자에게 보여져도 되는 게임 정보입니다.
         시스템 식별자와 표시용 게임명을 포함합니다.
@@ -776,7 +776,7 @@ components:
 
     GameResponse:
       allOf:
-        - $ref: "#/components/schemas/BaseGame"
+        - $ref: "#/components/schemas/GameSnippet"
         - type: object
           required: [secretWord]
           properties:
@@ -804,7 +804,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/BaseGame"
+            $ref: "#/components/schemas/GameSnippet"
         meta:
           $ref: "#/components/schemas/PageMeta"
 
