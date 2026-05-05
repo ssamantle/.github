@@ -163,7 +163,34 @@ paths:
       tags: [game]
       summary: 게임 생성
       security: [bearerAuth: []]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, startAt, endAt, secretWord]
+              properties:
+                title:
+                  type: string
+                  description: 게임의 제목입니다.
+                startAt:
+                  type: string
+                  format: date-time
+                  description: 게임이 시작되는 시간.
+                endAt:
+                  type: string
+                  format: date-time
+                  description: 게임이 종료되는 시간.
+                secretWord:
+                  type: string
+                  description: 정답 단어입니다.
       responses:
+        "400":
+          description: 잘못된 형식입니다.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "401":
           description: 사용자가 인증되지 않음.
           content:
@@ -200,7 +227,33 @@ paths:
       tags: [game]
       summary: 게임 정보 수정
       security: [bearerAuth: []]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 게임의 제목입니다.
+                startAt:
+                  type: string
+                  format: date-time
+                  description: 게임이 시작되는 시간.
+                endAt:
+                  type: string
+                  format: date-time
+                  description: 게임이 종료되는 시간.
+                secretWord:
+                  type: string
+                  description: 정답 단어입니다.
       responses:
+        "400":
+          description: 잘못된 형식입니다.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "401":
           description: 사용자가 인증되지 않음.
           content:
@@ -352,7 +405,22 @@ paths:
       tags: [game]
       summary: 제출
       security: [bearerAuth: []]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  type: string
+                  description: 사용자가 추측한 단어입니다.
       responses:
+        "400":
+          description: 잘못된 형식입니다.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "401":
           description: 사용자가 인증되지 않음.
           content:
