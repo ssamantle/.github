@@ -539,8 +539,19 @@ paths:
     get:
       tags: [game]
       summary: 게임 참가자 제출 기록
+      description: |
+        참가자가 제출한 단어들의 기록입니다.
+
+        순위 권을 벗어났던 것과 사전에 없는(Out-of-Vocabulary)인 제출 기록도 조회됩니다.
+        정답과의 유사도 순으로 1,000위 이상의 단어에는 유사도/정확도 정보(proximity)가 제공되지 않습니다.
       security: [bearerAuth: []]
       responses:
+        "200":
+          description: 사용자 제출 기록이 정상적으로 조회됨.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuessListResponse"
         "401":
           description: 사용자가 인증되지 않음.
           content:
@@ -945,3 +956,9 @@ components:
 
     SubmitGuessResponse:
       $ref: "#/components/schemas/BaseGuess"
+
+    GuessListResponse:
+      # TODO: 토론하기 - 과연 Pagination 해야하는가...
+      type: array
+      items:
+        $ref: "#/components/schemas/BaseGuess"
