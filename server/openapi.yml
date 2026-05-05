@@ -571,18 +571,20 @@ paths:
           format: uuid
     post:
       tags: [game]
-      summary: 제출
+      summary: 게임 참가자 단어 제출
       security: [bearerAuth: []]
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                word:
-                  type: string
-                  description: 사용자가 추측한 단어입니다.
+              $ref: "#/components/schemas/SubmitGuessRequest"
       responses:
+        "200":
+          description: 단어가 정상적으로 제출됨.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitGuessResponse"
         "400":
           description: 잘못된 형식입니다.
           content:
@@ -603,6 +605,21 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
           description: 게임을 찾을 수 없음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: |
+            제출한 단어가 사전에 없음. (Out-of-Vocabulary)
+
+            단어의 유사도, 정확도 정보는 제공되지 않습니다.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitGuessResponse"
+        "429":
+          description: 사용자가 지정된 시간에 너무 많은 요청을 보냄. (Rate limiting)
           content:
             application/json:
               schema:
@@ -858,3 +875,73 @@ components:
 
     GameUpdateResponse:
       $ref: "#/components/schemas/GameResponse"
+
+    BaseGuess:
+      type: object
+      required: [order, word, submittedAt]
+      properties:
+        order:
+          type: integer
+          description: |
+            제출 순위
+
+            다른 참가자들의 제출을 포함하여
+            이 게임에서 몇 번째 제출인지를 나타냅니다.
+          minimum: 1
+        word:
+          type: string
+          description: 사용자가 제출한 단어
+        submittedAt:
+          type: string
+          format: date-time
+          description: 제출 시각 (서버 기준)
+        proximity:
+          type:
+            - object
+            - "null"
+          description: |
+            제출된 단어와 정답 단어간의 유사도/정확도 정보입니다.
+
+            제출한 단어가 Out-of-Vocabulary 인 경우에는 null 로 대체됩니다.
+          required: [similarity, permille, normalizedSimilarity, displayText]
+          properties:
+            similarity:
+              type: number
+              description: 벡터 유사도
+              example: 0.5612662
+            permille:
+              type:
+                - integer
+                - "null"
+              description: |
+                가장 가까운 999개의 단어 중 몇 번째인지
+
+                정답에 가까울 수록 낮은 숫자가 주어지며
+                순위 권 외(1000위 이상)이면 null 이 반환된다.
+              minimum: 1
+              maximum: 999
+              example: null
+            normalizedSimilarity:
+              type: number
+              description: -100 에서 100 사이로 정규화 된 유사도 수치
+              example: 20.92
+            displayText:
+              type: string
+              description: 클라이언트에 표시될 정확도 문구
+              examples:
+                - "113/1000"
+                - "cold"
+                - "tepid"
+                - "far"
+                - "1000위 이상" # TODO: 순위권 외 표기방식 결정하기
+
+    SubmitGuessRequest:
+      type: object
+      required: [word]
+      properties:
+        word:
+          type: string
+          description: 사용자가 추측한 단어
+
+    SubmitGuessResponse:
+      $ref: "#/components/schemas/BaseGuess"
