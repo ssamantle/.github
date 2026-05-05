@@ -165,34 +165,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: [email, password]
-              properties:
-                email:
-                  type: string
-                  format: email
-                  description: 사용자 이메일 주소입니다.
-                password:
-                  type: string
-                  format: password
-                  description: 사용자 비밀번호입니다.
+              $ref: "#/components/schemas/LoginRequest"
       responses:
         "200":
           description: 로그인 성공
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  accessToken:
-                    type: string
-                    description: API 요청 시 Authorization 헤더에 사용할 Bearer 토큰
-                  refreshToken:
-                    type: string
-                    description: 액세스 토큰 만료 시 재발급을 위한 토큰
-                  tokenType:
-                    type: string
-                    example: "Bearer"
+                $ref: "#/components/schemas/LoginResponse"
         "400":
           description: 이메일 형식이 잘못되었거나, 이메일 또는 비밀번호가 누락됨.
           content:
@@ -668,3 +648,30 @@ components:
             - 잘못된 요청입니다.
             - 올바른 이메일 형식이 아닙니다.
             - 올바르지 않은 날짜 형식입니다.
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          description: 사용자 이메일 주소입니다.
+        password:
+          type: string
+          format: password
+          description: 사용자 비밀번호입니다.
+
+    LoginResponse:
+      type: object
+      required: [accessToken, refreshToken, tokenType]
+      properties:
+        accessToken:
+          type: string
+          description: API 요청 시 Authorization 헤더에 사용할 Bearer 토큰
+        refreshToken:
+          type: string
+          description: 액세스 토큰 만료 시 재발급을 위한 토큰
+        tokenType:
+          type: string
+          example: "Bearer"
