@@ -64,3 +64,9 @@ paths:
     post:
       tags: [game]
       summary: 제출
+components:
+  securitySchemes:
+    name:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
