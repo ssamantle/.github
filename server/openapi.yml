@@ -1,0 +1,66 @@
+openapi: "3.1.0"
+info:
+  title: Ssamantle Server
+  version: "2.0.0"
+servers:
+  - url: https://localhost:8080/v2
+    description: A Developement Server hosted on Localhost.
+paths:
+  /auth/email/request:
+    post:
+      tags: [auth]
+      deprecated: true
+      summary: 이메일 인증 요청
+  /auth/email/verify:
+    post:
+      tags: [auth]
+      deprecated: true
+      summary: 이메일 인증
+  /auth/signup:
+    post:
+      tags: [auth]
+      summary: 회원 가입
+  /auth/signin:
+    post:
+      tags: [auth]
+      summary: 회원 로그인
+  /user/{userId}:
+    patch:
+      tags: [user]
+      summary: 사용자 정보 수정
+  /game:
+    get:
+      tags: [game]
+      summary: 참가 가능 게임 목록
+    post:
+      tags: [game]
+      summary: 게임 생성
+  /game/{gameId}:
+    get:
+      tags: [game]
+      summary: 게임 정보 보기
+    patch:
+      tags: [game]
+      summary: 게임 정보 수정
+  /game/{gameId}/player:
+    get:
+      tags: [game]
+      summary: 게임 참가자 목록
+    post:
+      tags: [game]
+      summary: 게임 참가
+  /game/{gameId}/player/{userId}:
+    get:
+      tags: [game]
+      summary: 게임 참가자 게임 기록 정보
+    delete:
+      tags: [game]
+      summary: 게임 참가자 기록 말소
+  /game/{gameId}/player/{userId}/guess:
+    get:
+      tags: [game]
+      summary: 게임 참가자 제출 기록
+  /game/{gameId}/guess:
+    post:
+      tags: [game]
+      summary: 제출
