@@ -116,22 +116,40 @@ paths:
           application/json:
             schema:
               type: object
-              required: [username, email, password]
+              required: [username, email, emailVerificationToken, password]
               properties:
-                username:
-                  type: string
-                  description: 사용자명입니다.
                 email:
                   type: string
                   format: email
                   description: 사용자 이메일 주소입니다.
+                emailVerificationToken:
+                  type: string
+                  format: uuid
+                  description: 이메일 인증이 완료됨을 의미하는 토큰입니다.
+                username:
+                  type: string
+                  description: 사용자명입니다.
                 password:
                   type: string
                   format: password
                   description: 사용자 비밀번호입니다.
       responses:
+        "201":
+          description: 회원가입 성공
         "400":
-          description: 잘못된 형식입니다.
+          description: 요청 형식이 잘못됨 (필수 값 누락 등)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: 이메일 인증 토큰이 유효하지 않거나 만료됨
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: 사용자명이 중복됨
           content:
             application/json:
               schema:
@@ -156,8 +174,30 @@ paths:
                   format: password
                   description: 사용자 비밀번호입니다.
       responses:
+        "200":
+          description: 로그인 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    description: API 요청 시 Authorization 헤더에 사용할 Bearer 토큰
+                  refreshToken:
+                    type: string
+                    description: 액세스 토큰 만료 시 재발급을 위한 토큰
+                  tokenType:
+                    type: string
+                    example: "Bearer"
         "400":
-          description: 잘못된 형식입니다.
+          description: 이메일 형식이 잘못되었거나, 이메일 또는 비밀번호가 누락됨.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: 로그인 실패 (이메일 또는 비밀번호 불일치)
           content:
             application/json:
               schema:
