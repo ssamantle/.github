@@ -407,6 +407,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /game/{gameId}/polling:
+    # TODO
+    description: "TODO: 필요한가?"
+
   /game/{gameId}/player:
     parameters:
       - in: path
@@ -483,6 +487,7 @@ paths:
           type: string
           format: uuid
     get:
+      # TODO
       tags: [Game]
       summary: 게임 참가자 게임 기록 정보
       security: [bearerAuth: []]
