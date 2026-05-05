@@ -37,6 +37,19 @@ paths:
       tags: [user]
       summary: 사용자 정보 수정
       security: [bearerAuth: []]
+      responses:
+        "401":
+          description: 사용자가 인증되지 않음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: 사용자에게 작업을 수행할 권한이 없음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /game:
     get:
       tags: [game]
@@ -45,6 +58,13 @@ paths:
       tags: [game]
       summary: 게임 생성
       security: [bearerAuth: []]
+      responses:
+        "401":
+          description: 사용자가 인증되지 않음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /game/{gameId}:
     parameters:
       - in: path
@@ -58,10 +78,36 @@ paths:
       tags: [game]
       summary: 게임 정보 보기
       security: [bearerAuth: []]
+      responses:
+        "401":
+          description: 사용자가 인증되지 않음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: 사용자에게 작업을 수행할 권한이 없음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
     patch:
       tags: [game]
       summary: 게임 정보 수정
       security: [bearerAuth: []]
+      responses:
+        "401":
+          description: 사용자가 인증되지 않음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: 사용자에게 작업을 수행할 권한이 없음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /game/{gameId}/player:
     parameters:
       - in: path
@@ -75,10 +121,36 @@ paths:
       tags: [game]
       summary: 게임 참가자 목록
       security: [bearerAuth: []]
+      responses:
+        "401":
+          description: 사용자가 인증되지 않음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: 사용자에게 작업을 수행할 권한이 없음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
     post:
       tags: [game]
       summary: 게임 참가
       security: [bearerAuth: []]
+      responses:
+        "401":
+          description: 사용자가 인증되지 않음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: 사용자에게 작업을 수행할 권한이 없음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /game/{gameId}/player/{userId}:
     parameters:
       - in: path
@@ -99,10 +171,36 @@ paths:
       tags: [game]
       summary: 게임 참가자 게임 기록 정보
       security: [bearerAuth: []]
+      responses:
+        "401":
+          description: 사용자가 인증되지 않음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: 사용자에게 작업을 수행할 권한이 없음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
     delete:
       tags: [game]
       summary: 게임 참가자 기록 말소
       security: [bearerAuth: []]
+      responses:
+        "401":
+          description: 사용자가 인증되지 않음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: 사용자에게 작업을 수행할 권한이 없음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /game/{gameId}/player/{userId}/guess:
     parameters:
       - in: path
@@ -123,6 +221,19 @@ paths:
       tags: [game]
       summary: 게임 참가자 제출 기록
       security: [bearerAuth: []]
+      responses:
+        "401":
+          description: 사용자가 인증되지 않음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: 사용자에게 작업을 수행할 권한이 없음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /game/{gameId}/guess:
     parameters:
       - in: path
@@ -136,9 +247,35 @@ paths:
       tags: [game]
       summary: 제출
       security: [bearerAuth: []]
+      responses:
+        "401":
+          description: 사용자가 인증되지 않음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: 사용자에게 작업을 수행할 권한이 없음.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   securitySchemes:
     name:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  schemas:
+    ErrorResponse:
+      type: object
+      description: |
+        오류 메시지
+        오류 발생 원인에 대한 설명이 담겨 있을 수도 있습니다.
+      properties:
+        message:
+          type: string
+          examples:
+            - 잘못된 요청입니다.
+            - 올바른 이메일 형식이 아닙니다.
+            - 올바르지 않은 날짜 형식입니다.
