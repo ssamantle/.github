@@ -309,6 +309,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: 정답 단어가 사전에 없음. (Out-of-Vocabulary)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /game/{gameId}:
     parameters:
