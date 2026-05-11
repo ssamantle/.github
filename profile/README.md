@@ -4,7 +4,7 @@
 
 싸맨틀은 단어 유사도 기반 추측 게임인 [시맨틀](https://semantle-ko.newsjel.ly/)을 **실시간 멀티 플레이** 가능하도록 확장한 버전입니다.
 
-> [!note] 정보
+> [!note]
 > [시멘틀](https://semantle.com/)이란, Word2Vec 모델을 사용하여 제작된 단어 유사도 기반 추측 게임입니다.
 > 한국어 버전 Fork 로 알려진 것으로 [꼬맨틀](https://semantle-ko.newsjel.ly/)이 있습니다.
 
@@ -89,7 +89,7 @@ docker-compose up -d
 
 # 비고
 
-> [!TIP] 팁
+> [!TIP]
 > 
 > (자치회에게) 이 프로젝트는 15기 1학기 자치회로서 SSAFY DAY 행사용으로 준비한 콘텐츠 입니다. 콘텐츠 선정 근거로는 아래와 같은 명분을 사용하였습니다.
 > 
