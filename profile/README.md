@@ -1,5 +1,10 @@
 # Ssamantle (싸맨틀)
 
+[데모 클라이언트(Demo)](https://ssamantle.github.io/ssamantle-web-client-demo/)
+
+<img width="1281" height="1162" alt="Screenshot 2026-05-12 at 08 59 54" src="https://github.com/user-attachments/assets/a04b81e6-14d2-47d5-a871-84181bd520bf" />
+
+
 # 개요
 
 싸맨틀은 단어 유사도 기반 추측 게임인 [시맨틀](https://semantle-ko.newsjel.ly/)을 **실시간 멀티 플레이** 가능하도록 확장한 버전입니다.
@@ -37,8 +42,6 @@ architecture-beta
 | 유사도 엔진   | FastText 기반 코사인 유사도(-1.0 ~ 1.0) 산출    | 한국어 모델 최적화 |
 | 실시간 동기화 | 20~40인 동시 접속 및 실시간 스코어보드 업데이트 | 필드 테스트 완료   |
 | 멀티플레이    | 단일 호스트 기반의 실시간 배틀 모드 지원        | V1 핵심 기능       |
-
-[스크린샷 배치 권장]
 
 - **게임 플레이 화면**: 단어 입력 시 유사도가 출력되는 메인 UI (우측 상단)
 - **실시간 랭킹 화면**: 여러 사용자의 점수가 실시간으로 변동되는 대시보드 (좌측 하단)
